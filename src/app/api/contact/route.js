@@ -8,7 +8,8 @@ export const dynamic = "force-dynamic";
 const ALLOWED_ORIGINS = new Set([
   "https://hexel-tech.de",
   "https://www.hexel-tech.de",
-  "https://hexel-node1.vercel.app", 
+  "https://hexel-node1.vercel.app",
+]); // ✅ WICHTIG: geschlossen
 
 function corsHeaders(origin = "") {
   const allowOrigin = ALLOWED_ORIGINS.has(origin)
@@ -20,6 +21,7 @@ function corsHeaders(origin = "") {
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Max-Age": "86400",
+    "Content-Type": "application/json; charset=utf-8", // optional, aber gut
     Vary: "Origin",
   };
 }
@@ -34,7 +36,8 @@ export async function OPTIONS(req) {
 }
 
 /** kleine Helfer */
-const isEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(String(v || "").trim());
+const isEmail = (v) =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(String(v || "").trim());
 const isPhone = (v) => !v || /^[+()0-9\s-]{6,}$/.test(String(v).trim());
 
 /** POST */
@@ -54,10 +57,13 @@ export async function POST(req) {
 
   // Honeypot (Spam trap)
   if (typeof body?.website === "string" && body.website.trim().length > 0) {
-    return new Response(JSON.stringify({ message: "Danke! Wir melden uns kurzfristig." }), {
-      status: 200,
-      headers,
-    });
+    return new Response(
+      JSON.stringify({ message: "Danke! Wir melden uns kurzfristig." }),
+      {
+        status: 200,
+        headers,
+      }
+    );
   }
 
   // Felder wie deine Komponente sie sendet
