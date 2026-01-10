@@ -8,8 +8,7 @@ export const dynamic = "force-dynamic";
 const ALLOWED_ORIGINS = new Set([
   "https://hexel-tech.de",
   "https://www.hexel-tech.de",
-  "https://hexel-node1.vercel.app", // optional (Preview)
-]);
+  "https://hexel-node1.vercel.app", 
 
 function corsHeaders(origin = "") {
   const allowOrigin = ALLOWED_ORIGINS.has(origin)
